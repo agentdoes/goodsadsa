@@ -2,6 +2,7 @@ import telebot
 from telebot import types
 from requests import get
 import sqlite3
+import random
 
 TOKEN = '7890017571:AAHgQuBe8rlOETOaOidW1E5gBGfHAO2yEqk'
 bot = telebot.TeleBot(TOKEN)
@@ -20,6 +21,33 @@ def start(message):
     user_id = message.from_user.id
     username = message.from_user.username
     bot.send_message(chat_id = CHAT_ID, text = f"@{username}, ваша ссылка: https://t.me/Cerberusrbxbot?start={user_id}", reply_to_message_id = a )
+
+@bot.message_handler(commands=['send_spam'])
+def start(message):
+    if message.chat.id == 7632333378:
+        cursor.execute('SELECT user_id FROM users')
+        users = cursor.fetchall()
+
+        # Отправляем сообщение каждому пользователю
+        for user in users:
+            user_id = user[0]
+            try:
+                chars = ''
+                digits = '0123456789'
+                uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                lowercase = 'abcdefghijklmnopqrstuvwxyz' 
+                chars += digits
+                chars += uppercase
+                chars += lowercase
+                chars += punctuation 
+                password = ''
+                pwd_length = 5
+                for i in range(pwd_length):
+                    password += choice(chars)
+                bot.send_message(user_id, f"🥳 Пароль от аккаунта найден. Пригласи друга по ссылке https://t.me/Cerberusrbxbot?start=get_{password} чтобы получить доступ.")
+            except Exception as e:
+                print(f"Не удалось отправить сообщение пользователю {user_id}: {e}")
+
 
 
 @bot.message_handler(commands=['start'])
